@@ -1,6 +1,8 @@
 import requests
 import time
 import os
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from telegram import Bot
 
 # VARIABLES DE ENTORNO
@@ -38,8 +40,7 @@ def check_matches():
         total_goals = goals_home + goals_away
 
         stats_url = f"https://v3.football.api-sports.io/fixtures/statistics?fixture={fixture_id}"
-        stats_response = requests.get(stats_url, headers=headers)
-        stats = stats_response.json()
+        stats = requests.get(stats_url, headers=headers).json()
 
         try:
 
@@ -91,6 +92,8 @@ Probable Over 0.5 HT
 
 def run_bot():
 
+    bot.send_message(chat_id=CHAT_ID, text="✅ Bot iniciado correctamente")
+
     while True:
         try:
             check_matches()
@@ -99,9 +102,7 @@ def run_bot():
 
         time.sleep(60)
 
-import threading
-from http.server import HTTPServer, BaseHTTPRequestHandler
-
+# SERVIDOR WEB PARA RENDER
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -109,7 +110,7 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(b'Bot running')
 
 def run_server():
-    port = 10000
+    port = int(os.environ.get("PORT", 10000))
     server = HTTPServer(('0.0.0.0', port), Handler)
     server.serve_forever()
 
