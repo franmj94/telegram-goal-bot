@@ -21,6 +21,8 @@ async def check_matches():
 
     while True:
 
+        print("🔎 Revisando partidos en vivo...")
+
         try:
 
             response = requests.get(
