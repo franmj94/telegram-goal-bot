@@ -10,12 +10,11 @@ CHAT_ID = os.getenv("CHAT_ID")
 
 bot = Bot(token=TOKEN)
 
-API_URL = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
+API_URL = "https://v3.football.api-sports.io/fixtures"
 API_KEY = os.getenv("API_KEY")
 
 headers = {
-    "X-RapidAPI-Key": API_KEY,
-    "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+    "x-apisports-key": API_KEY
 }
 
 async def check_matches():
