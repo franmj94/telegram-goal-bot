@@ -1,5 +1,5 @@
 import os
-import time
+import asyncio
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from telegram import Bot
@@ -9,22 +9,13 @@ CHAT_ID = os.getenv("CHAT_ID")
 
 bot = Bot(token=TOKEN)
 
-def run_bot():
-
-    bot.send_message(
-        chat_id=CHAT_ID,
-        text="✅ Bot funcionando correctamente"
-    )
+async def run_bot():
+    await bot.send_message(chat_id=CHAT_ID, text="✅ Bot funcionando correctamente")
 
     while True:
-        # mensaje de prueba cada 30 minutos
-        bot.send_message(
-            chat_id=CHAT_ID,
-            text="🤖 Bot activo y funcionando"
-        )
-        time.sleep(1800)
+        await bot.send_message(chat_id=CHAT_ID, text="🤖 Bot activo")
+        await asyncio.sleep(1800)
 
-# servidor web para Render
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -38,4 +29,4 @@ def run_server():
 
 threading.Thread(target=run_server).start()
 
-run_bot()
+asyncio.run(run_bot())
